@@ -1,0 +1,29 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <link rel="stylesheet" href="{% static 'css/products.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Product List</h1>
+        <ul class="product-list">
+            {% for product in products %}
+                <li class="product-item">
+                    <!-- повертає повний абсолютний шлях до товару -->
+                    <a href="{{ product.get_absolute_url }}">{{ product.name }}</a><br>
+                    <span class="product-price">Price: ${{ product.price }}</span><br>
+                    <span class="product-rating">Rating: {{ product.rating }}</span><br>
+                    <span class="product-description">Description: {{ product.description }}</span>
+                </li>
+            {% empty %}
+                <li>No products available.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
