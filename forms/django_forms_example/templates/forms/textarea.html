@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Textarea</title>
+</head>
+<body>
+  <h2>Текстове поле</h2>
+  <form method="post" action="{% url 'textarea_form' %}">
+    {% csrf_token %}
+    <label for="message">Ваш коментар:</label><br>
+    <textarea id="message" name="message" rows="5" cols="40"></textarea><br><br>
+    <input type="submit" value="Надіслати">
+  </form>
+  {% if data %}
+    <hr>
+    <h3>Ви ввели:</h3>
+    <ul>
+      {% for key, value in data.items %}
+        <li><strong>{{ key }}:</strong> {{ value }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</body>
+</html>
