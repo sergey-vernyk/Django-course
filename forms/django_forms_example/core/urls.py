@@ -25,4 +25,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("basic/", views.handle_basic_form, name="basic_form"),
     path("textarea/", views.handle_textarea_form, name="textarea_form"),
+    path("inputs/", views.handle_inputs_form, name="inputs_form"),
+    path(
+        "checkbox-radio/",
+        views.handle_checkbox_radio_form,
+        name="checkbox_radio_form",
+    ),
+    path("selects/", views.handle_select_form, name="selects_form"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <title>Input types</title>
+</head>
+<body>
+  <h2>Усі типи input</h2>
+  <form method="post" action="{% url 'inputs_form' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="text" name="text" placeholder="text" maxlength="10"><br>
+    <input type="number" name="number" placeholder="number"><br>
+    <input type="password" name="password" placeholder="password"><br>
+    <input type="email" name="email" placeholder="email"><br>
+    <input type="url" name="url" placeholder="url" size="50"><br>
+    <input type="tel" name="tel" placeholder="tel"><br>
+    <input type="date" name="date"><br>
+    <input type="time" name="time"><br>
+    <input type="datetime-local" name="datetime"><br>
+    <input type="month" name="month"><br>
+    <input type="week" name="week"><br>
+    <input type="color" name="color"><br>
+    <input type="range" name="range" min="0" max="100"><br>
+    <input type="file" name="file" accept="image/*, .pdf" multiple><br>
+    <input type="hidden" name="hidden" value="12345"><br>
+    <input type="submit" value="Відправити">
+    <input type="reset" value="Скинути">
+  </form>
+  {% if data %}
+    <hr>`
+    <h3>Ви ввели:</h3>
+    <ul>
+      {% for key, value in data.items %}
+        {% if key == 'file' %}
+            <img src="{{ value }}" alt="image">
+        {% else %}
+            <li><strong>{{ key }}:</strong> {{ value }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+</body>
+</html>

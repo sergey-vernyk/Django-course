@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkboxes and Radios</title>
+</head>
+<body>
+  <h2>Прапорці та перемикачі</h2>
+  <form method="post" action="{% url 'checkbox_radio_form' %}">
+    {% csrf_token %}
+    <h3>Checkboxes:</h3>
+    <label><input type="checkbox" name="hobby" value="reading"> Читання</label><br>
+    <label><input type="checkbox" name="hobby" value="music"> Музика</label><br>
+    <label><input type="checkbox" name="hobby" value="sports"> Спорт</label><br>
+
+    <h3>Radio buttons:</h3>
+    <label><input type="radio" name="gender" value="male"> Чоловік</label><br>
+    <label><input type="radio" name="gender" value="female"> Жінка</label><br>
+    <input type="submit" value="Надіслати">
+  </form>
+  {% if data %}
+    <hr>
+    <h3>Ви ввели:</h3>
+    <ul>
+      {% for key, value in data.items %}
+        <li><strong>{{ key }}:</strong> {{ value }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</body>
+</html>

@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-@vx%5l0(0&02ihyz9gu94=_$i0sz2cpvvu8v=gh+spjke*32)y"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
@@ -117,6 +117,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+# визначення URL та місця зберігання медіа файлів
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
 

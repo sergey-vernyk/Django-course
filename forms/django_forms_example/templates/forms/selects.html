@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Select & Datalist</title>
+</head>
+<body>
+  <h2>Списки вибору</h2>
+  <form method="post" action="{% url 'selects_form' %}">
+    {% csrf_token %}
+    <label for="country">Країна:</label>
+    <select id="country" name="country">
+      <option value="ua">Україна</option>
+      <option value="pl">Польща</option>
+      <option value="de">Німеччина</option>
+    </select><br><br>
+
+    <label for="browser">Улюблений браузер:</label>
+    <input list="browsers" id="browser" name="browser">
+    <datalist id="browsers">
+      <option value="Chrome">
+      <option value="Firefox">
+      <option value="Edge">
+      <option value="Safari">
+      <option value="Brave">
+    </datalist><br><br>
+
+    <input type="submit" value="OK">
+  </form>
+  {% if data %}
+    <hr>
+    <h3>Ви ввели:</h3>
+    <ul>
+      {% for key, value in data.items %}
+        <li><strong>{{ key }}:</strong> {{ value }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</body>
+</html>
