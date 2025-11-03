@@ -1,7 +1,10 @@
 from django.conf import settings
+from django.contrib.auth import login
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import render
+
+from .forms import UserCreatingForm
 
 
 def handle_basic_form(request: HttpRequest) -> HttpResponse:
@@ -58,3 +61,20 @@ def handle_select_form(request: HttpRequest) -> HttpResponse:
         return render(request, "forms/selects.html", context={"data": data})
 
     return render(request, "forms/selects.html")
+
+
+def create_user(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        form = UserCreatingForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return render(
+                request,
+                template_name="forms_example/user_register.html",
+                context={"form": form, "success": True},
+            )
+    else:
+        form = UserCreatingForm()
+
+    return render(request, "forms_example/user_register.html", context={"form": form})
