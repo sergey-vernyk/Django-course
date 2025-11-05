@@ -18,7 +18,7 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from forms_example import views
 
 urlpatterns = [
@@ -32,4 +32,5 @@ urlpatterns = [
         name="checkbox_radio_form",
     ),
     path("selects/", views.handle_select_form, name="selects_form"),
+    path("forms/", include("forms_example.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
