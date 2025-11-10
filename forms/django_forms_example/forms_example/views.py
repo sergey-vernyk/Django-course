@@ -1,10 +1,10 @@
 from django.conf import settings
-from django.contrib.auth import login
+from django.contrib.auth import authenticate, login
 from django.http.request import HttpRequest
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
-from .forms import UserCreatingForm
+from .forms import AuthForm, UserCreatingForm
 
 
 def handle_basic_form(request: HttpRequest) -> HttpResponse:
@@ -78,3 +78,34 @@ def create_user(request: HttpRequest) -> HttpResponse:
         form = UserCreatingForm()
 
     return render(request, "forms_example/user_register.html", context={"form": form})
+
+
+def auth_user(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        form = AuthForm(data=request.POST)
+
+        if form.is_valid():
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
+
+            user = authenticate(request, username=username, password=password)
+
+            if user:
+                login(request, user)
+                return HttpResponseRedirect("/forms")
+
+            form.add_error(None, "Invalid username or password")
+
+            return render(
+                request,
+                template_name="forms_example/user_authorization.html",
+                context={"form": form},
+            )
+    else:
+        form = AuthForm()
+
+    return render(
+        request,
+        template_name="forms_example/user_authorization.html",
+        context={"form": form},
+    )

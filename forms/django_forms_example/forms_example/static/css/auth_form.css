@@ -1,0 +1,95 @@
+/* Стилі для сторінки авторизації */
+body {
+    font-family: "Segoe UI", sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 40px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* Форма логіну */
+form.user-form {
+    width: 400px;
+    margin: 0 auto;
+    padding: 25px 30px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+}
+
+/* Контейнер для поля */
+.form-group {
+    margin-bottom: 15px;
+}
+
+form.user-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+/* Поля вводу */
+form.user-form input[type="text"],
+form.user-form input[type="password"] {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+form.user-form input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Кнопки */
+form.user-form button {
+    width: 100%;
+    padding: 10px;
+    margin: 6px 0;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+form.user-form .btn-submit {
+    background-color: #007bff;
+}
+
+form.user-form .btn-submit:hover {
+    background-color: #0056b3;
+}
+
+form.user-form .btn-reset {
+    background-color: #6c757d;
+}
+
+form.user-form .btn-reset:hover {
+    background-color: #5a6268;
+}
+
+/* Повідомлення про помилки */
+.errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 0 0;
+    color: #d9534f;
+    font-size: 0.9em;
+}
+
+.errorlist.nonfield {
+    margin-bottom: 10px;
+    border-left: 3px solid #d9534f;
+    padding-left: 8px;
+}

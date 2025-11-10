@@ -1,0 +1,34 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        {% if user.is_authenticated %}
+        <h1>Вітаю, {{ user.username }}!</h1>
+        <p>Ви успішно автентифіковані.</p>
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Вийти</button>
+        </form>
+        {% else %}
+        <h1>Вітаю, гість!</h1>
+        <p>
+            Щоб побачити більше — увійдіть до системи або зареєструйтесь:
+            <br>
+            <a href="{% url 'auth_user' %}">Логін</a>
+            <br>
+            <a href="{% url 'register_user' %}">Реєстрація</a>
+        </p>
+        {% endif %}
+    </div>
+</body>
+
+</html>
