@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Categories</h1>
+
+<a href="{% url 'category_create' %}" class="btn">Create Category</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th style="width:180px;">Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for c in categories %}
+            <tr>
+                <td>{{ c.title }}</td>
+                <td>{{ c.description|default:"—" }}</td>
+                <td>
+                    <a href="{% url 'category_update' c.id %}" class="btn btn-warning">Edit</a>
+                    <a href="{% url 'category_remove' c.id %}" class="btn btn-danger"
+                        onclick="return confirm('Delete category?')">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

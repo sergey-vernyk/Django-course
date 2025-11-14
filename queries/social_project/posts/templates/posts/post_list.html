@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Posts</h1>
+
+<a href="{% url 'post_create' %}" class="btn">Create Post</a>
+
+<table>
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Categories</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for post in posts %}
+        <tr>
+            <td>{{ post.title }}</td>
+            <td>{{ post.author.username }}</td>
+
+            <td>
+                {% for c in post.categories.all %}
+                    <span class="badge">
+                        {{ c.title }}
+                        (<a href="{% url 'post_remove_category' post.id c.id %}" style="color:white;">x</a>)
+                    </span>
+                {% empty %}
+                    <span style="color:#777;">No categories</span>
+                {% endfor %}
+            </td>
+
+            <td>
+                <!-- Edit -->
+                <a href="{% url 'post_update' post.id %}" class="btn btn-warning">Edit</a>
+
+                <!-- Delete post -->
+                <a href="{% url 'post_remove' post.id %}" class="btn btn-danger"
+                   onclick="return confirm('Delete this post?');">
+                    Delete
+                </a>
+
+                <!-- Add category -->
+                <details>
+                    <summary style="cursor:pointer;">Add category</summary>
+                    <ul>
+                        {% for cat in categories %}
+                            <li>
+                                <a href="{% url 'post_add_category' post.id cat.id %}">
+                                    {{ cat.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </details>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
