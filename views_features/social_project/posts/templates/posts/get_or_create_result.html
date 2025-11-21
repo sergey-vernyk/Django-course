@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Operation Result</h1>
+
+    <p><strong>Category:</strong> {{ category.title }}</p>
+    <p><strong>Created:</strong> {{ created }}</p>
+
+    <a href="{% url 'category_list' %}" class="btn">Back to categories</a>
+{% endblock %}

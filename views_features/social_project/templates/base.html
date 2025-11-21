@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Social application</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px auto;
+            max-width: 900px;
+            line-height: 1.6;
+        }
+
+        nav {
+            background: #333;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        nav a {
+            color: white;
+            margin-right: 15px;
+            text-decoration: none;
+        }
+
+        h1 {
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+        }
+
+        table th, table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+
+        table th {
+            background: #eee;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            background: #444;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background: #222;
+        }
+
+        .btn-danger { background: #b74242; }
+        .btn-danger:hover { background: #8e2d2d; }
+
+        .btn-warning { background: #d1a237; }
+        .btn-warning:hover { background: #9c7a24; }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #777;
+            color: white;
+            border-radius: 4px;
+            margin-right: 4px;
+            font-size: 0.9em;
+        }
+
+        form p {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="{% url 'post_list' %}">Posts</a>
+        <a href="{% url 'category_list' %}">Categories</a>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+    </body>
+</html>

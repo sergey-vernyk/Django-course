@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Categories</h1>
+
+<a href="{% url 'category_create' %}" class="btn">Create Category</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th style="width:180px;">Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for c in categories %}
+        <tr>
+            <td>{{ c.title }}</td>
+            <td>{{ c.description|default:"—" }}</td>
+            <td>
+                <form action="{% url 'category_remove' c.id %}" style="display: inline;"
+                    onclick="return confirm('Delete this post?');" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" style="border: none;">Delete</button>
+                </form>
+                <a href="{% url 'category_update' c.id %}" class="btn btn-warning">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
