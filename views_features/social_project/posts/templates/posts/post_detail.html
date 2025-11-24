@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ post.title }}</h1>
+
+<p><strong>Author:</strong> {{ post.author.username }}</p>
+<p><strong>Categories:</strong>
+    {% for c in post.categories.all %}
+    {{ c.title }}{% if not forloop.last %}, {% endif %}
+    {% empty %}
+    —
+    {% endfor %}
+</p>
+
+<p><strong>Content:</strong></p>
+<div class="post-content">
+    {{ post.content|linebreaks }}
+</div>
+
+<div style="margin-top: 20px;">
+    <a href="{% url 'post_update' post.id %}" class="btn btn-warning">Edit</a>
+
+    <form action="{% url 'post_remove' post.id %}" method="post"
+        style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Delete this post?');">Delete</button>
+    </form>
+
+    <a href="{% url 'post_list' %}" class="btn btn-secondary">Back to list</a>
+</div>
+
+{% endblock %}

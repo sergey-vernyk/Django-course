@@ -7,57 +7,58 @@
 
 <table>
     <thead>
-    <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Categories</th>
-        <th>Actions</th>
-    </tr>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Categories</th>
+            <th>Actions</th>
+        </tr>
     </thead>
 
     <tbody>
-    {% for post in posts %}
-        <tr>
-            <td>{{ post.title }}</td>
-            <td>{{ post.author.username }}</td>
+        {% for post in posts %}
+            <tr>
+                <td><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></td>
+                <td>{{ post.author.username }}</td>
 
-            <td>
-                {% for c in post.categories.all %}
-                    <span class="badge">
-                        {{ c.title }}
-                        (<a href="{% url 'post_remove_category' post.id c.id %}" style="color:white;">x</a>)
-                    </span>
-                {% empty %}
-                    <span style="color:#777;">No categories</span>
-                {% endfor %}
-            </td>
+                <td>
+                    {% for c in post.categories.all %}
+                        <span class="badge">
+                            {{ c.title }}
+                            (<a href="{% url 'post_remove_category' post.id c.id %}" style="color:white;">x</a>)
+                        </span>
+                    {% empty %}
+                        <span style="color:#777;">No categories</span>
+                    {% endfor %}
+                </td>
 
-            <td>
-                <!-- Edit -->
-                <a href="{% url 'post_update' post.id %}" class="btn btn-warning">Edit</a>
+                <td>
+                    <!-- Edit -->
+                    <a href="{% url 'post_update' post.id %}" class="btn btn-warning">Edit</a>
 
-                <!-- Delete post -->
-                <a href="{% url 'post_remove' post.id %}" class="btn btn-danger"
-                   onclick="return confirm('Delete this post?');">
-                    Delete
-                </a>
+                    <!-- Delete post (with POST method, not GET)-->
+                    <form action="{% url 'post_remove' post.id %}" style="display: inline;"
+                        onclick="return confirm('Delete this post?');" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" style="border: none;">Delete</button>
+                    </form>
 
-                <!-- Add category -->
-                <details>
-                    <summary style="cursor:pointer;">Add category</summary>
-                    <ul>
-                        {% for cat in categories %}
+                    <!-- Add category -->
+                    <details>
+                        <summary style="cursor:pointer;">Add category</summary>
+                        <ul>
+                            {% for cat in categories %}
                             <li>
                                 <a href="{% url 'post_add_category' post.id cat.id %}">
                                     {{ cat.title }}
                                 </a>
                             </li>
-                        {% endfor %}
-                    </ul>
-                </details>
-            </td>
-        </tr>
-    {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </details>
+                </td>
+            </tr>
+        {% endfor %}
     </tbody>
 </table>
 

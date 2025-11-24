@@ -3,10 +3,11 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.post_list, name="post_list"),
-    path("posts/create/", views.post_create, name="post_create"),
-    path("posts/<int:pk>/edit/", views.post_update, name="post_update"),
-    path("posts/<int:pk>/remove/", views.post_remove, name="post_remove"),
+    path("", views.PostListView.as_view(), name="post_list"),
+    path("posts/<int:pk>/", views.PostDetailView.as_view(), name="post_detail"),
+    path("posts/create/", views.PostCreateView.as_view(), name="post_create"),
+    path("posts/<int:pk>/edit/", views.PostUpdateView.as_view(), name="post_update"),
+    path("posts/<int:pk>/remove/", views.PostDeleteView.as_view(), name="post_remove"),
     path(
         "posts/<int:post_id>/add/<int:category_id>/",
         views.post_add_category,

@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import (
     HttpRequest,
     HttpResponse,
@@ -8,8 +9,15 @@ from django.http import (
 )
 from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views.decorators.http import require_POST
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
 from .forms import CategoryForm, PostForm
 from .models import Category, Post
@@ -31,35 +39,58 @@ def debug_api(request: HttpRequest) -> JsonResponse:
     )
 
 
-def post_list(request: HttpRequest) -> HttpResponse:
-    """Отримати список постів."""
-    posts = Post.objects.all().select_related("author").prefetch_related("categories")
-    return render(request, "posts/post_list.html", {"posts": posts})
+class PostListView(LoginRequiredMixin, ListView):
+    """Список всіх постів для авторизованого користувача."""
+
+    queryset = Post.objects.select_related("author").prefetch_related("categories")
+    template_name = "posts/post_list.html"
+    context_object_name = "posts"
+    login_url = reverse_lazy("auth_user")
 
 
-def post_create(
-    request: HttpRequest,
-) -> HttpResponseRedirect | HttpResponse:
-    """Створити пост."""
-    form = PostForm(request.POST)
+class PostDetailView(DetailView):
+    """Детальна інформація про пост."""
 
-    if form.is_valid():
-        post = form.save(commit=False)
-        post.author = request.user
-        post.save()
-        form.save_m2m()  # важливо для M2M!
-        return redirect("post_list")
-
-    return render(request, "posts/post_form.html", {"form": form})
+    model = Post
+    context_object_name = "post"
+    template_name = "posts/post_detail.html"
 
 
-def post_remove(
-    _: HttpRequest, pk: int
-) -> HttpResponseRedirect | HttpResponsePermanentRedirect:
-    """Видалити пост."""
-    post = get_object_or_404(Post, pk=pk)
-    post.delete()
-    return redirect("post_list")
+class PostCreateView(CreateView):
+    """Створення поста і призначення йому поточного користувача як автора."""
+
+    template_name = "posts/post_form.html"
+    form_class = PostForm
+    model = Post
+    success_url = reverse_lazy("post_list")
+
+    def form_valid(self, form) -> HttpResponse:
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+class PostUpdateView(UpdateView):
+    """Оновлення посту."""
+
+    template_name = "posts/post_form.html"
+    form_class = PostForm
+    model = Post
+
+    def form_valid(self, form) -> HttpResponseRedirect:
+        form.save()
+        return HttpResponseRedirect(reverse("post_list"))
+
+
+class PostDeleteView(DeleteView):
+    """Видалення посту."""
+
+    model = Post
+    success_url = reverse_lazy("post_list")
+
+    def post(self, _: HttpRequest, *args, **kwargs) -> HttpResponseRedirect:
+        post = self.get_object()
+        post.delete()
+        return HttpResponseRedirect(self.success_url)
 
 
 def category_list(request: HttpRequest) -> HttpResponse:
@@ -77,20 +108,6 @@ def post_add_category(
 
     post.categories.add(category)
     return redirect("post_list")
-
-
-def post_update(request: HttpRequest, pk: int) -> HttpResponseRedirect | HttpResponse:
-    """Оновити пост."""
-    post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            form.save()
-            return redirect("post_list")
-    else:
-        form = PostForm(instance=post)
-
-    return render(request, "posts/post_form.html", {"form": form})
 
 
 def post_remove_category(
