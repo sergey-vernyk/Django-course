@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Категорії{% endblock %}
+
+{% block content %}
+    <h2>Категорії</h2>
+    <ul>
+        {% for category in page_obj %}
+            <li>
+                {{ category.title }} —
+                {{ category.post_set.count }} пост{{ category.post_set.count|pluralize:"ів,и" }}
+            </li>
+        {% empty %}
+            <p>Немає категорій</p>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,5 @@
+{% if post.author.avatar_url %}
+    <img src="{{ post.author.avatar_url }}" alt="avatar" width="30">
+{% endif %}
+
+{{ post.author.name|default:"Анонім" }}

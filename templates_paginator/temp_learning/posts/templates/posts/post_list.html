@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Список постів{% endblock %}
+
+{% block content %}
+    <h2>Усі пости</h2>
+
+    <p>Категорій у системі: {{ categories|length }}</p>
+
+    <ul>
+        {% for post in page_obj %}
+            {% include "components/post_card.html" with post=post counter=forloop.counter %}
+        {% empty %}
+            <p>Немає постів 😢</p>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

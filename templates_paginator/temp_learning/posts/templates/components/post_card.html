@@ -1,0 +1,25 @@
+<li style="margin-bottom: 25px;">
+    <h3>
+        {{ counter }}.
+        <a href="{% url 'post_detail' post.id %}">
+            {{ post.title|truncatechars:40 }}
+        </a>
+    </h3>
+
+    <p>Автор: {% include "components/author_info.html" %}</p>
+
+    <p>
+        Категорія:
+        {% if post.category %}
+            {{ post.category.title|upper }}
+        {% else %}
+            <em>без категорії</em>
+        {% endif %}
+    </p>
+
+    <p>Лайків: {{ post.likes }} (лайк{{ post.likes|pluralize:"ів,и" }})</p>
+
+    <p>Дата створення: {{ post.created_at|date:"d.m.Y H:i" }}</p>
+
+    <p>{{ post.content|truncatechars:80 }}</p>
+</li>
