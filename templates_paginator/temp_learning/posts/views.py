@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
 
@@ -8,6 +9,10 @@ def post_list(request: HttpRequest) -> HttpResponse:
     """Отримання списку всіх постів."""
     posts = Post.objects.select_related("author", "category").order_by("-created_at")
     categories = Category.objects.all()
+    paginator = Paginator(posts, 2)
+
+    page_number = request.GET.get("page")
+    posts = paginator.get_page(page_number)
 
     return render(
         request,
@@ -28,4 +33,9 @@ def post_detail(request: HttpRequest, post_id: int) -> HttpResponse:
 def category_list(request: HttpRequest) -> HttpResponse:
     """Отримання списку категорій."""
     categories = Category.objects.all()
+    paginator = Paginator(categories, 2)
+
+    page_number = request.GET.get("page")
+    categories = paginator.get_page(page_number)
+
     return render(request, "posts/category_list.html", {"categories": categories})

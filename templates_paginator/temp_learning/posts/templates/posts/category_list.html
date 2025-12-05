@@ -5,7 +5,7 @@
 {% block content %}
     <h2>Категорії</h2>
     <ul>
-        {% for category in page_obj %}
+        {% for category in categories %}
             <li>
                 {{ category.title }} —
                 {{ category.post_set.count }} пост{{ category.post_set.count|pluralize:"ів,и" }}
@@ -14,4 +14,8 @@
             <p>Немає категорій</p>
         {% endfor %}
     </ul>
+{% endblock %}
+
+{% block paginator %}
+    {% include "paginator.html" with page_obj=categories %}
 {% endblock %}

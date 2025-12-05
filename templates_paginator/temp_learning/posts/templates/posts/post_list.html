@@ -8,11 +8,15 @@
     <p>Категорій у системі: {{ categories|length }}</p>
 
     <ul>
-        {% for post in page_obj %}
+        {% for post in posts %}
             {% include "components/post_card.html" with post=post counter=forloop.counter %}
         {% empty %}
             <p>Немає постів 😢</p>
         {% endfor %}
     </ul>
 
+{% endblock %}
+
+{% block paginator %}
+    {% include "paginator.html" with page_obj=posts %}
 {% endblock %}

@@ -78,6 +78,39 @@
             border-radius: 50%;
             margin-right: 5px;
         }
+        
+        /* Пагінація */
+        .pagination {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .pagination .step-links a,
+        .pagination .current {
+            display: inline-block;
+            padding: 8px 14px;
+            margin: 0 4px;
+            background-color: #fafafa;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .pagination .step-links a {
+            color: #3498db;
+        }
+
+        .pagination .step-links a:hover {
+            background-color: #f0f0f0;
+            text-decoration: none;
+        }
+
+        .pagination .current {
+            background-color: #e8e8e8;
+            border-color: #ccc;
+            color: #333;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -86,6 +119,7 @@
 
     <main>
         {% block content %}{% endblock %}
+        {% block paginator %}{% endblock %}
     </main>
 
     {% include "layout/footer.html" %}
