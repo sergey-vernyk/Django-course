@@ -10,4 +10,6 @@ urlpatterns = [
     # session
     path("set-session/", views.set_session, name="set_session"),
     path("get-session/", views.get_session, name="get_session"),
+    path("clear-session/", views.clear_session, name="clear_session"),
+    path("update-session/", views.update_session, name="update_session"),
 ]
