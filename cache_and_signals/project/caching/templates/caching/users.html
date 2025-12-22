@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Users cache demo</title>
+</head>
+
+<body>
+
+    <h1>Users list (data cache)</h1>
+
+    <p>
+        ⏱ Час відповіді:
+        <strong>{% now "H:i:s" %}</strong>
+    </p>
+
+    <hr>
+
+    <h2>Користувачі</h2>
+
+    <ul>
+        {% for user in users %}
+            <li>{{ user.username }}</li>
+        {% empty %}
+            <li>Немає користувачів</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+    <p><strong>Пояснення:</strong></p>
+    <ul>
+        <li>Список користувачів береться з кешу</li>
+        <li>SQL виконується тільки при першому заході</li>
+        <li>Після create_user кеш очищається</li>
+    </ul>
+
+</body>
+
+</html>

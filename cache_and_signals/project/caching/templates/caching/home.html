@@ -1,0 +1,44 @@
+{% load cache %}
+
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage cache demo</title>
+</head>
+
+<body>
+
+    <h1>Homepage (cache_page)</h1>
+
+    <p>
+        ⏱ Час рендеру сторінки:
+        <strong>{% now "H:i:s" %}</strong>
+    </p>
+
+    <p>
+        Ця сторінка кешується цілком на 60 секунд
+    </p>
+
+    <hr>
+
+    <h2>Fragment cache всередині сторінки</h2>
+
+    {% cache 60 fragment_time %}
+        <p>
+            Закешований фрагмент:
+            <strong>{% now "H:i:s" %}</strong>
+        </p>
+    {% endcache %}
+
+    <hr>
+
+    <ul>
+        <li>Онови сторінку → час НЕ змінюється</li>
+        <li>Почекай 60 сек → час оновиться</li>
+    </ul>
+
+</body>
+
+</html>
