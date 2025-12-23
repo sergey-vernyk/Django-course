@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User projects (cache + m2m signals)</title>
+</head>
+    <body>
+        <h1>Проєкти користувача</h1>
+        <p>
+            👤 Користувач:
+            <strong>{{ request.user.username }}</strong>
+        </p>
+        <p> ⏱ Час відповіді сервера: <strong>{% now "H:i:s" %}</strong> </p>
+        <hr>
+        
+        <h2>Список проєктів</h2>
+        {% if projects %}
+            <ul>
+                {% for project in projects %}
+                    <li>{{ project.name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>❌ Користувач не входить до жодного проєкту</p>
+        {% endif %}
+        <hr>
+        <h3>Пояснення</h3>
+        <ul>
+            <li>Список проєктів береться <strong>з кешу</strong></li>
+            <li>Ключ кешу: <code>user:&lt;user_id&gt;:projects</code></li>
+            <li>При додаванні / видаленні користувача з проєкту</li>
+            <ul>
+                <li>спрацьовує <code>m2m_changed</code></li>
+                <li>кеш інвалідується автоматично</li>
+            </ul>
+        </ul>
+        <hr>
+    </body>
+</html>

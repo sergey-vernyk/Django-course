@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+
+<body>
+    <h1>🔐 Login</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: red;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" accept="{% url 'login' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+</body>

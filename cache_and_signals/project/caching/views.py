@@ -38,7 +38,6 @@ def create_user(_: HttpRequest) -> HttpResponse:
     return HttpResponse(f"User {user.username} created!")
 
 
-# можна використовувати як декоратор, або в urls
-# @cache_page(60)
+@cache_page(60)
 def homepage(request: HttpRequest) -> HttpResponse:
     return render(request, "caching/home.html")

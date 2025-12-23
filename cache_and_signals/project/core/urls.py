@@ -21,4 +21,5 @@ from django.urls import include, path
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("caching.urls")),
+    path("projects/", include("django_signals.urls")),
 ]
