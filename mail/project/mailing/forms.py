@@ -20,3 +20,10 @@ class FeedbackForm(forms.Form):
             }
         )
     )
+
+    attachment = forms.FileField(
+        required=False,
+        widget=forms.ClearableFileInput(
+            attrs={"class": "form-control"},
+        ),
+    )

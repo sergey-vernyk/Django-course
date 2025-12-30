@@ -12,22 +12,22 @@
     <div class="container mt-5" style="max-width: 600px;">
         <h1 class="mb-4">Send a feedback</h1>
 
-        <form method="post" class="bg-white p-4 rounded shadow">
+        <form method="post" enctype="multipart/form-data" class="bg-white p-4 rounded shadow">
             {% csrf_token %}
 
             {% if form.non_field_errors %}
-            <div class="alert alert-danger">
-                {{ form.non_field_errors }}
-            </div>
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
             {% endif %}
 
             <div class="mb-3">
                 {{ form.email.label_tag }}
                 {{ form.email }}
                 {% if form.email.errors %}
-                <div class="text-danger small mt-1">
-                    {{ form.email.errors }}
-                </div>
+                    <div class="text-danger small mt-1">
+                        {{ form.email.errors }}
+                    </div>
                 {% endif %}
             </div>
 
@@ -35,14 +35,25 @@
                 {{ form.message.label_tag }}
                 {{ form.message }}
                 {% if form.message.errors %}
-                <div class="text-danger small mt-1">
-                    {{ form.message.errors }}
-                </div>
+                    <div class="text-danger small mt-1">
+                        {{ form.message.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                {{ form.attachment.label_tag }}
+                {{ form.attachment }}
+                {% if form.attachment.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ form.attachment.errors }}
+                    </div>
                 {% endif %}
             </div>
 
             <button type="submit" class="btn btn-primary">Send feedback</button>
         </form>
+
     </div>
 
 </body>
