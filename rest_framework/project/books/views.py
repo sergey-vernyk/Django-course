@@ -22,3 +22,36 @@ class BookListCreateAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class BookDetailAPIView(APIView):
+    """View для оновлення, видалення та отримання книги."""
+
+    http_method_names = ["options", "get", "put", "patch", "delete"]
+
+    def get_object(self, pk: int) -> Book:
+        return get_object_or_404(Book, pk=pk)
+
+    def get(self, _: Request, pk: int) -> Response:
+        book = self.get_object(pk)
+        serializer = BookSerializer(instance=book)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request: Request, pk: int) -> Response:
+        book = self.get_object(pk)
+        serializer = BookSerializer(instance=book, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request: Request, pk: int) -> Response:
+        book = self.get_object(pk)
+        serializer = BookSerializer(book, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def delete(self, _: Request, pk: int) -> Response:
+        book = self.get_object(pk)
+        book.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

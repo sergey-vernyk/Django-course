@@ -35,3 +35,41 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ("id", "title", "authors", "publisher", "publication_date", "pages")
+
+    def create(self, validated_data: dict[str, Any]) -> Book:
+        authors_data = validated_data.pop("authors", None)
+        publisher_data = validated_data.pop("publisher", None)
+
+        print(authors_data)
+        print(publisher_data)
+        print(validated_data)
+
+        publisher, _ = Publisher.objects.get_or_create(**publisher_data)
+        book = Book.objects.create(publisher=publisher, **validated_data)
+
+        for author_data in authors_data:
+            author, _ = Author.objects.get_or_create(**author_data)
+            book.authors.add(author)
+
+        return book
+
+    def update(self, instance: Book, validated_data: dict[str, Any]) -> Book:
+        authors_data = validated_data.pop("authors", None)
+        publisher_data = validated_data.pop("publisher", None)
+
+        updated_instance = super().update(instance, validated_data)
+
+        if publisher_data:
+            publisher, _ = Publisher.objects.get_or_create(**publisher_data)
+            updated_instance.publisher = publisher
+
+        if authors_data:
+            new_authors = []
+            for author_data in authors_data:
+                author, _ = Author.objects.get_or_create(**author_data)
+                new_authors.append(author)
+
+            updated_instance.authors.set(new_authors)
+
+        updated_instance.save()
+        return instance
