@@ -40,3 +40,24 @@ def remove_from_cart(request: HttpRequest) -> JsonResponse:
         request.session["cart"] = cart
 
     return JsonResponse({"status": "ok", "cart_count": len(cart)})
+
+
+def rate_product(request: HttpRequest) -> JsonResponse:
+    """Розрахунок нового рейтингу товару і його оновлення в БД."""
+    product_id = request.POST.get("product_id")
+    rating = int(request.POST.get("rating", 0))
+
+    product = get_object_or_404(Product, id=product_id)
+
+    calculated_rating = round(
+        (product.rating * product.rating_count + rating) / (product.rating_count + 1), 1
+    )
+
+    new_rating_count = product.rating_count + 1
+    product.rating = calculated_rating
+    product.rating_count = new_rating_count
+    product.save(update_fields=["rating", "rating_count"])
+
+    return JsonResponse(
+        {"new_rating": f"{calculated_rating:.1f}", "rating_count": new_rating_count},
+    )
