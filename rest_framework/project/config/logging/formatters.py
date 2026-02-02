@@ -1,7 +1,7 @@
 import json
 import logging
 
-from log_records import SimpleLogRecord
+from .log_records import SimpleLogRecord
 
 
 class FileJSONFormatter(logging.Formatter):

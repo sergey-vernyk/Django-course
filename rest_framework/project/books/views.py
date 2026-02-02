@@ -1,5 +1,7 @@
 import logging
 
+from django.db import DatabaseError
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
@@ -27,11 +29,11 @@ class BookListCreateAPIView(APIView):
         try:
             serializer.is_valid(raise_exception=True)
         except ValidationError as e:
-            logger.warning(e.detail)
+            logger.warning(e.detail, extra={"user": request.user.pk})
             raise e
 
         serializer.save()
-        logger.info("New booking created.")
+        logger.info("New book created!", extra={"user": request.user.pk})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -41,7 +43,14 @@ class BookDetailAPIView(APIView):
     http_method_names = ["options", "get", "put", "patch", "delete"]
 
     def get_object(self, pk: int) -> Book:
-        return get_object_or_404(Book, pk=pk)
+        try:
+            return get_object_or_404(Book, pk=pk)
+        except Http404 as e:
+            logger.warning("Book with ID %d not found.", pk)
+            raise e
+        except DatabaseError as e:
+            logger.error(str(e), exc_info=True)
+            raise e
 
     def get(self, _: Request, pk: int) -> Response:
         book = self.get_object(pk)
@@ -62,7 +71,17 @@ class BookDetailAPIView(APIView):
         serializer.save()
         return Response(serializer.data)
 
-    def delete(self, _: Request, pk: int) -> Response:
+    def delete(self, request: Request, pk: int) -> Response:
         book = self.get_object(pk)
-        book.delete()
+        try:
+            book.delete()
+        except DatabaseError as e:
+            logger.error(
+                "Database error while book deleting.",
+                extra={"error": str(e)},
+                exc_info=True,
+            )
+            raise e
+
+        logger.info("Book with ID %d deleted!", pk, extra={"user": request.user.pk})
         return Response(status=status.HTTP_204_NO_CONTENT)

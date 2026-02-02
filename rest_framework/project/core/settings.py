@@ -46,6 +46,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    "core.middlewares.RequestIdMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -139,24 +140,43 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "simple": {
-            "format": "[ %(asctime)s - %(levelname)s ] %(message)s [ %(name)s - %(module)s.%(funcName)s() ]",
+            "format": "[ %(asctime)s - %(request_id)s - %(levelname)s ] %(message)s [ %(name)s - %(module)s.%(funcName)s() ]",
             "style": "%",
         },
+        "json": {
+            "()": "config.logging.formatters.FileJSONFormatter",
+        },
+    },
+    "filters": {
+        "request_uid": {
+            "()": "config.logging.filters.RequestFilter",
+        }
     },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
             "formatter": "simple",
+            "filters": ["request_uid"],
+        },
+        "json_file": {
+            "class": "config.logging.handlers.JSONFileHandler",
+            "filename": "logs/app.json",
+            "filters": ["request_uid"],
+            "formatter": "json",
+            "level": "INFO",
         },
     },
     "loggers": {
         "django": {
             "handlers": ["console"],
+            "filters": ["request_uid"],
+            "formatter": "simple",
             "level": "INFO",
             "propagate": True,
         },
         "books": {
-            "handlers": ["console"],
+            "handlers": ["json_file"],
+            "filters": ["request_uid"],
             "level": "INFO",
         },
     },
