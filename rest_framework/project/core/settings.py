@@ -133,3 +133,31 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.BasicAuthentication"
     ],
 }
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "simple": {
+            "format": "[ %(asctime)s - %(levelname)s ] %(message)s [ %(name)s - %(module)s.%(funcName)s() ]",
+            "style": "%",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": True,
+        },
+        "books": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+    },
+}
