@@ -35,7 +35,7 @@ USER $user
 
 # додаємо папку з локально встановленими Python пакетами в PATH
 # для простого запуску через 'python manage.py ...'
-ENV PATH="$PATH/home/$user/.local/bin"
+ENV PATH="/home/$user/.local/bin:/usr/bin:$PATH"
 
 # оновлюємо pip і встановлюємо всі залежності проєкту
 RUN pip install --upgrade pip && \
