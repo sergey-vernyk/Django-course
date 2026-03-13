@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-backend
+  template:
+    metadata:
+      labels:
+        app: django-backend
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+      containers:
+        - name: backend
+          image: sergeyvernyk/django-backend:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8001
+          command: ["sh", "-c"]
+          args:
+            - |
+              python manage.py migrate &&
+              python manage.py runserver 0.0.0.0:8001
+          envFrom:
+            - secretRef: 
+                name: backend-secrets
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
