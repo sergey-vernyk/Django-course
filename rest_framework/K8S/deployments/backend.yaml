@@ -1,0 +1,39 @@
+apiVersion: apps/v1 # Використовуємо API для Deployment
+kind: Deployment # Deployment керує pod-ами та їх оновленням
+metadata:
+  name: django-backend # Ім'я deployment
+spec:
+  replicas: 3 # Кількість одночасно запущених pod-ів
+  selector:
+    matchLabels:
+      app: django-backend # Deployment шукає pod-и з цим label
+  template:
+    metadata:
+      labels:
+        app: django-backend # Label, який отримає кожен pod
+    spec:
+      securityContext:
+        runAsUser: 1000 # Запуск контейнера не від root
+        runAsGroup: 1000
+        runAsNonRoot: true
+      containers:
+        - name: backend # Назва контейнера всередині pod
+          image: sergeyvernyk/django-backend-2:1.0.0 # Docker image backend-а
+          imagePullPolicy: IfNotPresent # Не завантажувати image повторно, якщо вже є локально
+          ports:
+            - containerPort: 8001 # Порт, який слухає Django всередині контейнера
+          command: ["sh", "-c"]
+          args:
+            - |
+              python manage.py migrate &&   # Спочатку застосовуємо міграції
+              python manage.py runserver 0.0.0.0:8001   # Потім запускаємо Django
+          envFrom:
+            - secretRef:
+                name: backend-secrets # Завантажуємо змінні середовища із Secret
+          resources:
+            requests:
+              cpu: 100m # Мінімально гарантований CPU
+              memory: 128Mi # Мінімально гарантована пам'ять
+            limits:
+              cpu: 500m # Максимально дозволений CPU
+              memory: 512Mi # Максимально дозволена пам'ять

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adminer # Deployment для Adminer (веб-інтерфейс для БД)
+spec:
+  replicas: 1 # Один pod достатньо для demo
+  selector:
+    matchLabels:
+      app: adminer # Deployment керує pod-ами з цим label
+  template:
+    metadata:
+      labels:
+        app: adminer # Label для pod-а
+    spec:
+      containers:
+        - name: adminer
+          image: adminer # Офіційний образ Adminer
+          ports:
+            - containerPort: 8080 # Порт контейнера, який слухає веб-інтерфейс
+          resources:
+            requests:
+              memory: "64Mi" # Мінімально гарантована пам'ять
+              cpu: "250m" # Мінімально гарантований CPU
+
+            limits:
+              memory: "128Mi" # Максимальна пам'ять
+              cpu: "500m" # Максимальний CPU

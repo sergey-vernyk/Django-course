@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: adminer # Service для доступу до Adminer (веб-інтерфейс для БД)
+spec:
+  selector:
+    app: adminer # Service направляє трафік на pod Adminer
+  ports:
+    - port: 8080 # Внутрішній порт service
+      targetPort: 8080 # Порт контейнера Adminer
+      nodePort: 30002 # Зовнішній порт вузла для доступу з браузера
+
+  type: NodePort # Service доступний зовні через nodeIP + nodePort

@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from books.views import check_pod_host
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -23,4 +24,5 @@ from django.urls import include, path
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("books/", include("books.urls")),
+    path("check_pod/", check_pod_host, name="check_pod_host"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

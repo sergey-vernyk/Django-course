@@ -1,8 +1,11 @@
 import logging
+import random
+import socket
 
 from django.db import DatabaseError
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -14,6 +17,14 @@ from .models import Book
 from .serializers import BookSerializer
 
 logger = logging.getLogger(__name__)
+
+
+@api_view(["GET"])
+def check_pod_host(_: Request) -> Response:
+    """Перевірка імені хосту (pod) який прийняв клієнтський запит."""
+    return Response(
+        {"hostname": socket.gethostname(), "random": random.randint(1, 100000)}
+    )
 
 
 class BookListCreateAPIView(APIView):

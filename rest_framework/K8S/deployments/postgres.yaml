@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres # Ім'я deployment для бази даних
+spec:
+  replicas: 1 # Для PostgreSQL зазвичай один pod
+  selector:
+    matchLabels:
+      app: postgres # Deployment керує pod-ами з цим label
+  template:
+    metadata:
+      labels:
+        app: postgres # Label для pod-а
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:14.6-alpine # Легкий офіційний образ PostgreSQL
+          ports:
+            - containerPort: 5432 # Стандартний порт PostgreSQL
+          envFrom:
+            - secretRef:
+                name: postgres-secret # Паролі та налаштування бази із Secret
+          env:
+            - name: POSTGRES_INITDB_ARGS
+              value: "--data-checksums" # Увімкнення перевірки цілісності даних
+
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata # Каталог для даних БД
+          resources:
+            requests:
+              memory: "256Mi" # Мінімально гарантована пам'ять
+              cpu: "250m" # Мінімально гарантований CPU
+            limits:
+              memory: "512Mi" # Максимальна пам'ять
+              cpu: "500m" # Максимальний CPU
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data # Підключення постійного сховища
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc # PVC для збереження даних після перезапуску pod-а
