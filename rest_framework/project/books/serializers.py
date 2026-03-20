@@ -40,10 +40,6 @@ class BookSerializer(serializers.ModelSerializer):
         authors_data = validated_data.pop("authors", None)
         publisher_data = validated_data.pop("publisher", None)
 
-        print(authors_data)
-        print(publisher_data)
-        print(validated_data)
-
         publisher, _ = Publisher.objects.get_or_create(**publisher_data)
         book = Book.objects.create(publisher=publisher, **validated_data)
 
