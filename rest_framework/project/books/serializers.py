@@ -72,4 +72,4 @@ class BookSerializer(serializers.ModelSerializer):
             updated_instance.authors.set(new_authors)
 
         updated_instance.save()
-        return instance
+        return updated_instance
