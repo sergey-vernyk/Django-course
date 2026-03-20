@@ -224,4 +224,5 @@ __marimo__/
 .vscode
 *.db
 *.txt
+!requirements.txt
 .idea
