@@ -4,33 +4,37 @@ on:
   push:
     branches:
       - main
-    # paths:
-    #   - rest_framework/**
+    paths:
+      - rest_framework/** # запуск лише якщо змінено DRF частину проєкту
+
   pull_request:
     branches:
       - main
-    # paths:
-    #   - rest_framework/**
-  workflow_dispatch:
+    paths:
+      - rest_framework/** # перевірка PR перед merge
 
-  
+  workflow_dispatch: # ручний запуск з GitHub UI
+
 permissions:
-  contents: read
+  contents: read # мінімально необхідні права на контент репозиторію
 
 jobs:
   test:
+    # буде запущено на останній версії OS Linux Ubuntu
     runs-on: ubuntu-latest
 
     defaults:
       run:
         shell: bash
-        working-directory: ./rest_framework/project
+        working-directory: ./rest_framework/project # усі команди виконуються з Django project dir
 
     strategy:
-      fail-fast: false
+      fail-fast: false # одна версія Python не блокує іншу при виникненні помилки на одній із них
       matrix:
-        python-version: ["3.12", "3.13"]
+        python-version: ["3.12", "3.13"] # тест на двох актуальних версіях Python
 
+    # сервіс бази даних (як в docker compose)
+    # необхідний тому що в тестах використовується БД PostgreSQL
     services:
       postgres:
         image: postgres:16-alpine
@@ -40,12 +44,14 @@ jobs:
           POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
+        # чекати поки Postgres стане ready
         options: >-
           --health-cmd="pg_isready -U postgres"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
 
+    # змінні оточення, які будуть використані в коді DRF
     env:
       POSTGRES_DB_NAME: test_db
       POSTGRES_USER: postgres
@@ -54,9 +60,8 @@ jobs:
       POSTGRES_PORT: 5432
       SECRET_KEY: django-secret-key
 
-
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4 # checkout репозиторію (як git checkout на іншу гілку вашого репозиторію)
 
       - uses: actions/setup-python@v5
         with:
@@ -69,20 +74,23 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      # перевірка стилю і потенційних помилок
       - name: Ruff lint
         run: |
           ruff check .
 
+      # чи немає незакомічених міграцій
       - name: Migration Check
         run: |
           python manage.py makemigrations --check --dry-run
 
+      # запуск тестів із coverage
       - name: Run Tests
         run: |
           coverage run manage.py test
 
+      # звіт по покриттю коду тестами, але
+      # без службових migration файлів
       - name: Coverage report
         run: |
           coverage report --omit='*/migrations/*'
-
-
