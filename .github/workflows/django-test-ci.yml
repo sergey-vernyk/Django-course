@@ -61,9 +61,9 @@ jobs:
       SECRET_KEY: django-secret-key
 
     steps:
-      - uses: actions/checkout@v4 # checkout репозиторію (як git checkout на іншу гілку вашого репозиторію)
+      - uses: actions/checkout@v6 # checkout репозиторію (як git checkout на іншу гілку вашого репозиторію)
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip

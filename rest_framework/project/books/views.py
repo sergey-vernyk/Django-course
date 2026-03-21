@@ -45,7 +45,7 @@ class BookListCreateAPIView(APIView):
 
         serializer.save()
         logger.info("New book created!", extra={"user": request.user.pk})
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class BookDetailAPIView(APIView):
