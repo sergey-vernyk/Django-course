@@ -121,3 +121,29 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = "static/"
+
+# Якщо True — Celery не відправляє задачу в broker,
+# а виконує її одразу в тому ж процесі.
+# Зручно для локальної розробки або тестування без worker.
+CELERY_TASK_ALWAYS_EAGER = (
+    os.environ.get("CELERY_TASK_ALWAYS_EAGER", "False").lower() == "true"
+)
+
+# Адреса broker-а, через який Celery отримує задачі.
+# Наприклад:
+# redis://redis:6379/0 для Redis
+# або
+# amqp://guest:guest@rabbitmq:5672// для RabbitMQ
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
+
+# Backend для збереження результатів виконаних задач.
+# Якщо задача повертає результат, Celery може записати його сюди.
+# Часто теж використовується Redis.
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
+
+# Якщо задача виконується через CELERY_ALWAYS_EAGER=True,
+# результат за замовчуванням не зберігається.
+# Цей параметр дозволяє зберігати результат навіть у eager-режимі.
+CELERY_TASK_STORE_EAGER_RESULT = (
+    os.environ.get("CELERY_TASK_STORE_EAGER_RESULT", "False").lower() == "true"
+)
