@@ -8,4 +8,6 @@ urlpatterns = [
     path("random/", views.run_unstable_task, name="random"),
     path("hash_passwords/", views.run_hashing_passwords_task, name="hashing"),
     path("get_result/<uuid:task_id>/", views.get_task_result, name="task_result"),
+    path("register/", views.register_view, name="register"),
+    path("application/", views.application_view, name="application"),
 ]

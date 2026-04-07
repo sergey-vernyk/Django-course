@@ -147,3 +147,14 @@ CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
 CELERY_TASK_STORE_EAGER_RESULT = (
     os.environ.get("CELERY_TASK_STORE_EAGER_RESULT", "False").lower() == "true"
 )
+
+# Якщо worker впав — задача повернеться назад у чергу
+CELERY_TASK_REJECT_ON_WORKER_LOST = True
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

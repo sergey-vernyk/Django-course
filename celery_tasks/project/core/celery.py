@@ -12,4 +12,4 @@ app = Celery("my_project")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
 # авто-пошук задач в указаних модулях
-app.autodiscover_tasks(packages=["accounts.tasks.emails", "accounts.tasks.demo"])
+app.autodiscover_tasks(packages=["accounts.tasks"])

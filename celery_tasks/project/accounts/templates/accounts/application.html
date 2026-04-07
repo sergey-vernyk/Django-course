@@ -1,0 +1,6 @@
+<form method="post" action="{% url 'application' %}">
+    {% csrf_token %}
+    <input name="full_name" placeholder="Full name">
+    <input name="email" placeholder="Email">
+    <button type="submit">Send</button>
+</form>
