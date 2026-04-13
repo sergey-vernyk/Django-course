@@ -11,6 +11,7 @@ class UserProfile(models.Model):
         related_name="profile",
     )
     email_sent = models.BooleanField(default=False)
+    reminder_sent = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:

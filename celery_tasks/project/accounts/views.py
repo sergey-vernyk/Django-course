@@ -1,3 +1,4 @@
+import json
 import uuid
 
 from celery.result import AsyncResult
@@ -5,6 +6,7 @@ from django.contrib.auth import get_user_model, hashers, login
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.http.request import HttpRequest
 from django.shortcuts import redirect, render
+from django_celery_beat.models import CrontabSchedule, PeriodicTask
 
 from .models import Application, UserProfile
 from .tasks.api import process_application
@@ -113,6 +115,25 @@ def register_view(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
             login(request, user)  # одразу авторизуємо користувача
             # email відправляється асинхронно через Celery
             send_welcome_email.delay(user.pk)
+
+            # створює відкладену ОДНОРАЗОВУ задачу для нагадування користувачу
+            # через певний проміжок часу (на наступний день, наприклад)
+            schedule, created = CrontabSchedule.objects.get_or_create(
+                minute="*/5",  # запустити через 5 хвилин (виключно для демо)
+                hour="*",
+                day_of_week="*",
+                day_of_month="*",
+                month_of_year="*",
+            )
+
+            PeriodicTask.objects.create(
+                crontab=schedule,
+                name=f"one-time-reminder-{user.pk}",
+                task="accounts.tasks.periodic.remind_create_application",
+                args=json.dumps((user.pk,)),
+                one_off=True,  # одноразова задача!
+            )
+
             return redirect("register")
 
         return HttpResponse("User already registered.")

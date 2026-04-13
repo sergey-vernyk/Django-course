@@ -74,12 +74,32 @@ services:
     healthcheck:
       # перевіряє доступність воркера
       test:
-        ["CMD-SHELL", "python celery inspect ping - destination celery@celery"]
+        ["CMD-SHELL", "celery inspect ping - destination celery@celery"]
       interval: 60s
       timeout: 10s
-      retries: 3
+      retries: 2
     depends_on:
       db:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    networks:
+      - backend
+
+  celery-beat:
+    image: django-backend
+    container_name: celery-beat-tasks
+    user: django-user
+    volumes:
+      - .:/app
+    command: celery -A core.celery.app beat -l INFO
+    environment:
+      - CELERY_BEAT_SCHEDULER=django_celery_beat.schedulers:DatabaseScheduler
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+      celery-worker:
         condition: service_healthy
       backend:
         condition: service_started
