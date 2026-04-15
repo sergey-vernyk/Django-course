@@ -106,6 +106,34 @@ services:
     networks:
       - backend
 
+  flower:
+    image: django-backend
+    container_name: flower-tasks-monitoring
+    user: django-user
+    volumes:
+      - .:/app
+    command: celery -A core.celery.app flower
+    environment:
+        # порт на якому доступний моніторинг (127.0.0.1:5555)
+      - FLOWER_PORT=5555
+        # дозволяє зберігати та відображати вже оброблені задачі
+        # після перезавантаження сервісу
+      - FLOWER_PERSISTENT=True
+        # назва бази даних куди зберігаються дані про задачі
+      - FLOWER_DB=flower_db
+    env_file: .env
+    ports:
+      - 5555:5555
+    depends_on:
+      db:
+        condition: service_healthy
+      celery-worker:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    networks:
+      - backend
+
   adminer:
     image: adminer
     container_name: adminer-postgres
