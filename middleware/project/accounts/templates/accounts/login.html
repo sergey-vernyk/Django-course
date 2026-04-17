@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login</title>
+</head>
+
+<body>
+    <h1>Login</h1>
+
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+
+        <label>Username:</label><br>
+        <input type="text" name="username" required><br><br>
+
+        <label>Password:</label><br>
+        <input type="password" name="password" required><br><br>
+
+        <button type="submit">Login</button>
+
+        {% for message in messages %}
+            {% if "success" in message.tags %} 
+                <p style="color: green; font-style:italic;">{{ message }}</p>
+            {% elif "error" in message.tags %}
+                <p style="color: red; font-style:italic;">{{ message }}</p>
+            {% else %}
+                <p style="font-style:italic;">{{ message }}
+            {% endif %}
+        {% endfor %}
+    </form>
+
+    <p>
+        No account?
+        <a href="{% url 'register' %}">Register</a>
+    </p>
+</body>
+
+</html>
