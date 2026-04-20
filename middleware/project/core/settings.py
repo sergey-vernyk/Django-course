@@ -70,7 +70,7 @@ MIDDLEWARE = [
     # захист від clickjanking, коли <iframe> перекриває
     # своїм UI кнопки сайту і користувач не здогадуючись
     # може клацнути кнопку невідомого UI
-    # "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -139,3 +139,35 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = "static/"
+
+
+AUTH_USER_MODEL = "accounts.User"
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "simple": {
+            "format": "[ %(asctime)s - %(levelname)s ] %(message)s [ %(name)s - %(module)s.%(funcName)s():%(lineno)s ]",
+            "style": "%",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": True,
+        },
+        "core": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+    },
+}

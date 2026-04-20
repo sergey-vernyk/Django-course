@@ -1,8 +1,11 @@
+import logging
 from collections.abc import Callable
 from typing import Any
 
 from django.http import HttpRequest, HttpResponse
 from django.template.response import TemplateResponse
+
+logger = logging.getLogger(__name__)
 
 # Загальна схема 'обгортання' view middleware
 #
@@ -13,6 +16,13 @@ from django.template.response import TemplateResponse
 #    Middleware B (response)
 #    Middleware A (response)
 # <- Response
+
+# Новий стиль написання Middleware (Ти сам керуєш порядком виконання)
+
+# __call__()
+#    ├── перед-обробка запиту
+#    ├── виклик view
+#    ├── пост-обробка відповіді
 
 # Middleware - це глобальний рівень
 

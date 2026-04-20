@@ -9,4 +9,5 @@ urlpatterns = [
     path("profile/", views.profile_view, name="profile"),
     path("logout/", views.logout_view, name="logout"),
     path("danger/", views.dangerous_view, name="clickjaking"),
+    path("beta/dashboard/", views.beta_dashboard_view, name="beta_dashboard"),
 ]

@@ -15,6 +15,7 @@ def register_view(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
         User.objects.create_user(
             username=request.POST["username"],
             password=request.POST["password"],
+            role=request.POST["role"],
         )
         messages.success(request, "User has been registered successfully!")
         return redirect("login")
@@ -73,4 +74,27 @@ def dangerous_view(request: HttpRequest) -> HttpResponse:
                 Delete account
             </button>
         </form>
+    """)
+
+
+def beta_dashboard_view(request: HttpRequest) -> HttpResponse:
+    """Покращений дашбоард в бета версії (симуляція відповіді)."""
+
+    username = getattr(request.user, "username", "anon")
+    # raise Exception("Oops!")
+    return HttpResponse(f"""
+        <h1>🚀 Beta Dashboard</h1>
+
+        <p>Welcome, <b>{username}</b></p>
+        <p>Request ID: {getattr(request, "request_id", "-")}</p>
+        <p>Beta bucket: {getattr(request, "beta_bucket", "-")}</p>
+
+        <hr>
+
+        <h3>Experimental features:</h3>
+        <ul>
+            <li>⚡ New analytics engine</li>
+            <li>🧪 A/B testing panel</li>
+            <li>📊 Real-time metrics</li>
+        </ul>
     """)

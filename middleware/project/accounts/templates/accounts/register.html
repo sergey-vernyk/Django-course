@@ -17,6 +17,11 @@
         <label>Password:</label><br>
         <input type="password" name="password" required><br><br>
 
+        <label>Role:</label><br>
+        <input type="radio" name="role" value="admin" required> Admin<br>
+        <input type="radio" name="role" value="teacher"> Teacher<br>
+        <input type="radio" name="role" value="student" checked> Student<br><br>
+
         {% if error %}
             <p style="color:red;">{{ error }}</p>
         {% endif %}
