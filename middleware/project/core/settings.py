@@ -42,14 +42,35 @@ INSTALLED_APPS = [
     "accounts",
 ]
 
+# Є middleware, які:
+# - працюють з логікою (Auth, Session)
+# - працюють з UX (Messages)
+# - працюють з безпекою (CSRF, XFrame, Security)
+
 MIDDLEWARE = [
+    # переадресовує на HTTPS, додає спеціальні заголовки
+    # у відповідь для підтримання безпеки
     "django.middleware.security.SecurityMiddleware",
+    # вмикає підтримку сесії для автентифікації користувача через cookies
     "django.contrib.sessions.middleware.SessionMiddleware",
+    # блокує заборонені User-Agent, долає слеш '/' в кінці URL,
+    # або 'www' якщо налаштовано в проекті
     "django.middleware.common.CommonMiddleware",
+    # додає захист від CSRF атак для небезпечних запитів
+    # (POST, PUT, PATCH, DELETE), перевіряє заголовок 'Referer',
+    # перевіряє дозволені Origin для виконання небезпечних запитів,
+    # перевіряє CSRF token в формі (<form>) шаблону {% csrftoken %} та збереженого в cookies
     "django.middleware.csrf.CsrfViewMiddleware",
+    # додає атрибут (об'єкт) user до об'єкта request,
+    # який завжди повинен бути присутній, коли користувач автентифікувався в системі
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # додає можливість передавати одноразові повідомлення між запитами
+    # використовує session або cookies
     "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # захист від clickjanking, коли <iframe> перекриває
+    # своїм UI кнопки сайту і користувач не здогадуючись
+    # може клацнути кнопку невідомого UI
+    # "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
