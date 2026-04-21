@@ -64,6 +64,9 @@ MIDDLEWARE = [
     # додає атрибут (об'єкт) user до об'єкта request,
     # який завжди повинен бути присутній, коли користувач автентифікувався в системі
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # використати або один, або інший
+    "core.middlewares.BetaAccessMiddlewareNew",
+    # "core.middlewares.BetaAccessMiddlewareOld",
     # додає можливість передавати одноразові повідомлення між запитами
     # використовує session або cookies
     "django.contrib.messages.middleware.MessageMiddleware",
