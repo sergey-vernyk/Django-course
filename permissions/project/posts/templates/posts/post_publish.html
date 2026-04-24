@@ -1,0 +1,12 @@
+<h2>Publish Post</h2>
+
+<p>Are you sure you want to publish this post?</p>
+
+<form method="post" action="{% url 'post_publish' post.id %}">
+    {% csrf_token %}
+    <button type="submit">Yes, publish</button>
+</form>
+
+<hr>
+
+<a href="/">Cancel</a>

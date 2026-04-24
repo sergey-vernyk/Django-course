@@ -1,0 +1,51 @@
+<h1>Posts</h1>
+
+<p>
+    Logged in as: <b>{{ user.username }}</b>
+</p>
+
+<hr>
+
+{% if perms.posts.add_post %}
+    <a href="{% url 'post_create' %}">➕ Create Post</a>
+{% endif %}
+
+<hr>
+
+{% if posts and perms.posts.view_post %}
+    <!-- VIEW -->
+    {% for post in posts %}
+        <div style="margin-bottom: 20px;">
+            <h2>{{ post.title }}</h2>
+            <p>{{ post.content }}</p>
+            <p><i>Author: {{ post.author.username }}</i></p>
+
+            <p>Status:
+                {% if post.is_published %}
+                    ✅ Published
+                {% else %}
+                    ❌ Not published
+                {% endif %}
+            </p>
+
+            <!-- EDIT -->
+            {% if perms.posts.change_post %}
+                <a href="{% url 'post_edit' post.id %}">✏️ Edit</a>
+            {% endif %}
+
+            <!-- PUBLISH -->
+            {% if perms.posts.publish_post %}
+                {% if not post.is_published %}
+                    <form method="post" action="{% url 'post_publish' post.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">🚀 Publish</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <hr>
+    {% endfor %}
+{% else %}
+    <p>No posts yet</p>
+{% endif %}
